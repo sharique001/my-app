@@ -11,6 +11,9 @@ import Input from './input';
 import Output1 from './output1';
 import Output2 from './output2';
 
+import _ from 'lodash';
+
+
 class Main extends Component {
   state = {
       value: 0,
@@ -24,10 +27,14 @@ class Main extends Component {
       authorOrg: '',
       articleURL: '',
       text: '',
+      tweets: [],
+      tweetid: '',
   }
   constructor(props){
       super(props);
       this.handleChangeForm = this.handleChangeForm.bind(this);
+      this.handleChangeRadio = this.handleChangeRadio.bind(this);
+
   }
 
   handleChange = (event, value) => {
@@ -53,18 +60,38 @@ class Main extends Component {
       })
       .then((myJson) => {
         console.log("result is " , myJson);
-        this.setState({loaded1: true})
+        this.setState({loaded1: true, tweets: JSON.parse(myJson)})
       });  
   }
 
   handleSubmit2 = () => {
     this.setState({submitted2: true, loaded: false, value: 2})
-    window.setTimeout(() => {
-        this.setState({loaded: true})
-      }, 
-      2000
-  );
+    let selectedTweet = _.filter(this.state.tweets, tweet => tweet.tweetid ==this.state.tweetid)
+
+        fetch('http://127.0.0.1:5002/tweet', 
+    {   method: 'post', 
+        headers: {"Content-type": "application/json; charset=UTF-8"},
+        body: JSON.stringify(selectedTweet)})
+    .then((response) => {
+        console.log(response)
+        return response.json();
+      })
+      .then((myJson) => {
+        console.log("result is " , myJson);
+        this.setState({loaded1: true, tweets: JSON.parse(myJson)})
+      });  
+
+  //   window.setTimeout(() => {
+  //       this.setState({loaded: true})
+  //     }, 
+  //     2000
+  // );
 }
+
+    handleChangeRadio = event => {
+        console.log("value is ", event.target.value);
+        this.setState({tweetid: event.target.value});
+    }
 
   handleChangeForm = name => event => {
     this.setState({
@@ -107,6 +134,9 @@ class Main extends Component {
                                         authorOrg = {this.state.authorOrg}
                                         articleURL = {this.state.articleURL}
                                         handleSubmit = {this.handleSubmit2}
+                                        tweets = {this.state.tweets}
+                                        tweetid = {this.state.tweetid}
+                                        handleChange = {this.handleChangeRadio}
                                     /> :
                                     <Output2 
                                         loaded = {this.state.loaded}

@@ -12,14 +12,15 @@ import Button from 'material-ui/Button';
 
 import _ from 'lodash';
 
-let TwitterComponent = () => {
-    return <div style = {{fontSize: 20}}> <img src = "/images/wsj.jpg" style = {{height: 60}} /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Score: 50%
-    <Paper style = {{overflow: 'auto', height: 72, width: 250, fontSize: 16}}> Hi you are a good person because you always
-         healp other people and also never complain </Paper> </div>
+let TwitterComponent = (props) => {
+console.log("props.tweet = ", props.tweet)
+    return <div style = {{fontSize: 20}}> <img src = "/images/wsj.jpg" style = {{height: 60}} /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Score: 50%
+    <Paper style = {{overflow: 'auto', height: 72, width: 250, fontSize: 16}}> {props.tweet.text} </Paper> </div>
 }
+
 class Output1 extends Component{
     state = {
-        value: "0"
+        value: ""
     }
 
     constructor(props){
@@ -41,10 +42,10 @@ class Output1 extends Component{
             </center>: 
             <div className = "row">             
                 <div className = "row col-md-9" style = {{marginTop: 20}}>
-                    {_.map(_.range(1, 10), (num, index) => {
+                    {_.map(this.props.tweets, (tweet) => {
                         return ( <div className = "col-md-4">
-                                <TwitterComponent/>
-                                <Radio value = {String(index)} checked = {this.state.value == String(index)} onChange = {(event, checked) => this.handleChange(event, checked)}/>
+                                <TwitterComponent tweet = {tweet}/>
+                                <Radio value = {tweet.tweetid} checked = {tweet.tweetid == this.props.tweetid} onChange = {(event, checked) => this.props.handleChange(event, checked)}/>
                     </div> )
                     })}
                     </div>

@@ -10,10 +10,9 @@ import _ from 'lodash';
 import ReactSpeedometer from "react-d3-speedometer";
 
 
-let TwitterComponent = () => {
+let TwitterComponent = (props) => {
     return <div style = {{fontSize: 20}}> <img src = "/images/wsj.jpg" style = {{height: 60}} /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Score: 50%
-    <Paper style = {{overflow: 'auto', height: 72, width: 250, fontSize: 16}}> Hi you are a good person because you always
-         healp other people and also never complain </Paper> </div>
+    <Paper style = {{overflow: 'auto', height: 72, width: 250, fontSize: 16}}> {props.tweet.text} </Paper> </div>
 }
 
 class Analytics extends Component{
@@ -52,8 +51,11 @@ class Analytics extends Component{
                     <div className = "row" style = {{marginTop: -0}}>
                         <div className = "col-md-4">
                             <h4> Top 5 based on sentiment </h4>
-                            {_.map(_.range(1, 6), (num, index) => {
-                                return <div> <TwitterComponent/> <br/> </div>
+                            {_.map(this.props.tweets, tweet => {
+                                return <div> 
+                                        <TwitterComponent tweet = {tweet}/> 
+                                        <br/> 
+                                    </div>
                             })}
                         </div>
                         <div className = "col-md-4">

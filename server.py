@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
 from flask_cors import CORS, cross_origin
+import main
 
 app = Flask(__name__)
 api = Api(app)
